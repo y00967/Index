@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة وسيط للخدمات القانونية والعقارية والمزادات</title>
+<!-- Google Fonts & FontAwesome Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --primary: #102a43;
+  --primary-hover: #0b1d30;
+  --accent: #d9b44a;
+  --accent-hover: #c4a13d;
+  --bg-color: #f4f6f8;
+  --card-bg: #ffffff;
+  --text-main: #17202a;
+  --text-muted: #627d98;
+  --border-color: #bcccdc;
+  --shadow: 0 10px 30px rgba(16, 42, 67, 0.08);
+  --danger: #e74c3c;
+  --success: #27ae60;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: 'Tajawal', Tahoma, Arial, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.8;
+}
+/* Header & Nav */
+header {
+  background: var(--primary);
+  color: white;
+  padding: 15px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.brand-logo {
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.brand-logo i { color: var(--accent); }
+nav {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+nav a:hover { color: var(--accent); }
+
+/* Buttons & Badges */
+.btn {
+  border: 0;
+  border-radius: 10px;
+  padding: 12px 24px;
+  background: var(--accent);
+  color: var(--primary);
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(217, 180, 74, 0.3);
+}
+.btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  box-shadow: none;
+}
+.btn-outline:hover {
+  background: var(--accent);
+  color: var(--primary);
+}
+.badge {
+  background: var(--accent);
+  color: var(--primary);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 13px;
+  display: inline-block;
+}
+
+/* Page Navigation Management */
+.page-section { display: none; }
+.page-section.active { display: block; }
+
+/* Real Estate Grid */
+.real-estate-grid, .auction-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 25px;
+  margin-top: 20px;
+}
+.property-card, .auction-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+.property-img, .auction-img {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.property-body, .auction-body {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.price-tag {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--primary);
+}
+.timer-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Modals */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(4px);
+  overflow-y: auto;
+}
+.modal-content {
+  background: white;
+  padding: 35px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+.modal-content.large { max-width: 950px; }
+.close-modal {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
+.form-group input, .form-group select, .form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  font-family: inherit;
+}
+footer {
+  text-align: center;
+  background: var(--primary);
+  color: white;
+  padding: 30px;
+  margin-top: 50px;
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+<div class="brand-logo" id="secretLogoTrigger" onclick="switchPage('home')">
+  <i class="fa-solid fa-scale-balanced"></i> <b>وسيط</b>
+</div>
+<nav>
+<a href="#" onclick="switchPage('home')">الرئيسية</a>
+<a href="#" onclick="switchPage('realestate')">العقارات والأراضي</a>
+<a href="#" onclick="switchPage('auction')">المزاد الرقمي</a>
+<a href="#" onclick="switchPage('home'); location.href='#trainee';">المتدربون</a>
+<button class="btn btn-outline" id="userBtn" onclick="openAuthModal()"><i class="fa-solid fa-user"></i> دخول</button>
+</nav>
+</header>
+
+<main>
+<!-- الصفحة الرئيسية -->
+<div id="homePage" class="page-section active">
+  <section style="background: linear-gradient(135deg, var(--primary) 0%, #1e3a5f 100%); color: white; padding: 60px 8%; border-radius: 0 0 24px 24px;">
+    <h1>منصة وسيط المتكاملة</h1>
+    <p>استشارات قانونية، بيع وشراء العقارات، والمزادات الإلكترونية الموثوقة قانونياً.</p>
+    <div style="display:flex; gap:15px; margin-top:20px;">
+      <button class="btn" onclick="switchPage('realestate')"><i class="fa-solid fa-building-user"></i> استعراض العقارات</button>
+      <button class="btn btn-outline" style="color:white; border-color:white;" onclick="switchPage('auction')"><i class="fa-solid fa-gavel"></i> المشاركة بالمزاد</button>
+    </div>
+  </section>
+</div>
+
+<!-- صفحة العقارات والأراضي -->
+<div id="realestatePage" class="page-section">
+  <section style="max-width:1200px; margin:auto; padding:40px 20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+      <h2><i class="fa-solid fa-city"></i> سوق العقارات والأراضي</h2>
+      <button class="btn" onclick="alert('يرجى تسجيل الدخول لإضافة عقار جديد')"><i class="fa-solid fa-plus"></i> إضافة عقار للبيع</button>
+    </div>
+    
+    <div class="real-estate-grid">
+      <!-- عقار 1 -->
+      <div class="property-card">
+        <div class="property-img" style="background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80');">
+          <span class="badge" style="position:absolute; top:15px; right:15px;">أرض سكنية</span>
+        </div>
+        <div class="property-body">
+          <h3>أرض استثمارية - صنعاء</h3>
+          <p><i class="fa-solid fa-location-dot"></i> حدة - موقع متميز على شارعين</p>
+          <p>المساحة: 12 لبنة | البصيرة موثقة ومفحوصة قانونياً</p>
+          <div class="price-tag">45,000,000 ر.ي</div>
+          <button class="btn btn-outline" style="margin-top:15px; width:100%;" onclick="alert('تم ارسال طلب التواصل مع الوكيل القانوني للملكية')">طلب معاينة وتواصل</button>
+        </div>
+      </div>
+      
+      <!-- عقار 2 -->
+      <div class="property-card">
+        <div class="property-img" style="background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=600&q=80');">
+          <span class="badge" style="position:absolute; top:15px; right:15px;">فلة فاخرة</span>
+        </div>
+        <div class="property-body">
+          <h3>فلة للبيع - عدن</h3>
+          <p><i class="fa-solid fa-location-dot"></i> خور مكسر - إطلالة مباشرة</p>
+          <p>المساحة: 500 متر مربع | ملكية حرية مسجلة</p>
+          <div class="price-tag">$220,000</div>
+          <button class="btn btn-outline" style="margin-top:15px; width:100%;" onclick="alert('تم ارسال طلب التواصل مع الوكيل القانوني للملكية')">طلب معاينة وتواصل</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- صفحة المزاد الرقمي -->
+<div id="auctionPage" class="page-section">
+  <section style="max-width:1200px; margin:auto; padding:40px 20px;">
+    <h2><i class="fa-solid fa-gavel"></i> المزادات الإلكترونية النشطة</h2>
+    <p style="text-align:center;">مزادات موثقة تحت إشراف محامين معتمدين لضمان سلامة الإجراءات</p>
+
+    <div class="auction-grid">
+      <!-- مزاد 1 -->
+      <div class="auction-card">
+        <div class="auction-img" style="background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80');">
+          <div class="timer-badge"><i class="fa-solid fa-clock"></i> ينتهي خلال: 04:12:30</div>
+        </div>
+        <div class="auction-body">
+          <h3>عمارة تجارية (حكم قضائي)</h3>
+          <p>المزاد العلني المقام على العقار الاستثماري رقم 402</p>
+          <div style="background:#f4f6f8; padding:10px; border-radius:8px; margin:10px 0;">
+            <small>السعر الحالي للمزايدة:</small>
+            <div class="price-tag" id="bidPrice1">85,000,000 ر.ي</div>
+          </div>
+          <button class="btn" style="width:100%; justify-content:center;" onclick="placeBid('bidPrice1', 1000000)">تقديم مزايدة (+1,000,000 ر.ي)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</main>
+
+<!-- Modals -->
+<div class="modal" id="authModal">
+<div class="modal-content">
+<span class="close-modal" onclick="closeAuthModal()">&times;</span>
+<h3 style="text-align: center; color: var(--primary);">تسجيل الدخول</h3>
+<button class="btn" style="width:100%; justify-content:center; margin-top:15px;" onclick="closeAuthModal()">موافق</button>
+</div>
+</div>
+
+<div class="modal" id="adminLoginModal">
+<div class="modal-content">
+<span class="close-modal" onclick="closeAdminLoginModal()">&times;</span>
+<h3 style="text-align: center; color: var(--primary);"><i class="fa-solid fa-user-shield"></i> تسجيل دخول إدارة المنصة</h3>
+<form onsubmit="handleAdminLogin(event)">
+  <div class="form-group">
+    <label>اسم المستخدم</label>
+    <input type="text" required placeholder="admin">
+  </div>
+  <div class="form-group">
+    <label>كلمة المرور</label>
+    <input type="password" required placeholder="••••••••">
+  </div>
+  <button type="submit" class="btn" style="width:100%; justify-content:center;">دخول اللوحة</button>
+</form>
+</div>
+</div>
+
+<footer>
+<p>© 2026 منصة وسيط للخدمات القانونية والعقارية - جميع الحقوق محفوظة</p>
+</footer>
+
+<script>
+// Navigation Switcher
+function switchPage(pageId) {
+  document.querySelectorAll('.page-section').forEach(page => {
+    page.classList.remove('active');
+  });
+  if(pageId === 'home') document.getElementById('homePage').classList.add('active');
+  if(pageId === 'realestate') document.getElementById('realestatePage').classList.add('active');
+  if(pageId === 'auction') document.getElementById('auctionPage').classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Secret Trigger Functions for Admin (Triple Click & Key Combo)
+let logoClickCount = 0;
+let logoClickTimer = null;
+const secretLogoTrigger = document.getElementById("secretLogoTrigger");
+
+secretLogoTrigger.addEventListener("click", function() {
+  logoClickCount++;
+  clearTimeout(logoClickTimer);
+  
+  if (logoClickCount === 3) {
+    openAdminLoginModal();
+    logoClickCount = 0;
+  } else {
+    logoClickTimer = setTimeout(function() {
+      logoClickCount = 0;
+    }, 700);
+  }
+});
+
+document.addEventListener("keydown", function(event) {
+  if (event.ctrlKey && event.shiftKey && (event.key === 'A' || event.key === 'a' || event.key === 'ش')) {
+    event.preventDefault();
+    openAdminLoginModal();
+  }
+});
+
+function openAuthModal() { document.getElementById("authModal").style.display = "flex"; }
+function closeAuthModal() { document.getElementById("authModal").style.display = "none"; }
+function openAdminLoginModal() { document.getElementById("adminLoginModal").style.display = "flex"; }
+function closeAdminLoginModal() { document.getElementById("adminLoginModal").style.display = "none"; }
+
+function handleAdminLogin(e) {
+  e.preventDefault();
+  closeAdminLoginModal();
+  alert("مرحباً بك في لوحة تحكم المنصة والعقارات والمزادات.");
+}
+
+function placeBid(elementId, increment) {
+  const el = document.getElementById(elementId);
+  let current = parseInt(el.textContent.replace(/[^0-9]/g, ''));
+  current += increment;
+  el.textContent = current.toLocaleString('ar-YE') + " ر.ي";
+  alert("تم تسجيل المزايدة بنجاح!");
+}
+</script>
+</body>
+</html>
